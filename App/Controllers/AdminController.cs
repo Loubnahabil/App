@@ -37,7 +37,85 @@ public class AdminController : Controller
     }
 
 
-    // Other methods...
+    // GET: Admin/EditIncident/5
+    public async Task<IActionResult> EditIncident(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var incident = await _context.EnvironmentalIncidents.FindAsync(id);
+        if (incident == null)
+        {
+            return NotFound();
+        }
+        return View(incident);
+    }
+
+    // POST: Admin/EditIncident/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditIncident(int id, [Bind("IncidentId,Title,Description,Location,Type,Status")] EnvironmentalIncident incident)
+    {
+        if (id != incident.IncidentId)
+        {
+            return NotFound();
+        }
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                _context.Update(incident);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(ManageIncidents));
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.EnvironmentalIncidents.Any(e => e.IncidentId == incident.IncidentId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+        return View(incident);
+    }
+
+    // GET: Admin/DeleteIncident/5
+    public async Task<IActionResult> DeleteIncident(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var incident = await _context.EnvironmentalIncidents
+            .FirstOrDefaultAsync(m => m.IncidentId == id);
+        if (incident == null)
+        {
+            return NotFound();
+        }
+
+        return View(incident);
+    }
+
+    // POST: Admin/DeleteIncident/5
+    [HttpPost, ActionName("DeleteIncident")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var incident = await _context.EnvironmentalIncidents.FindAsync(id);
+        _context.EnvironmentalIncidents.Remove(incident);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(ManageIncidents));
+    }
+
+
 }
 
 

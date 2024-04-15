@@ -19,10 +19,10 @@
                 <td>@incident.Description</td>
                 <td>@incident.Status.ToString()</td>
                 <td>
-                    @Html.ActionLink("Edit", "EditIncident", new { id = incident.IncidentId }) |
-                    @Html.ActionLink("Delete", "DeleteIncident", new { id = incident.IncidentId })
-
+                    @Html.ActionLink("Edit", "EditIncident", "Admin", new { id = incident.IncidentId }, new { @class = "link-class" }) |
+                    @Html.ActionLink("Delete", "DeleteIncident", "Admin", new { id = incident.IncidentId }, new { @class = "link-class" })
                 </td>
+
 
             </tr>
         }
