@@ -1,0 +1,14 @@
+﻿@model App.Models.EnvironmentalIncident
+
+<h2>Manage Report</h2>
+
+<form asp-action="UpdateStatus" method="post">
+    <input type="hidden" asp-for="IncidentId" />
+
+    <div class="form-group">
+        <label asp-for="Status"></label>
+        <select asp-for="Status" class="form-control" asp-items="@Html.GetEnumSelectList<IncidentStatus>()"></select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Status</button>
+</form>

@@ -1,0 +1,25 @@
+﻿@model IEnumerable<App.Models.EnvironmentalIncident>
+
+<h2>My Reported Incidents</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Date Reported</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var incident in Model)
+        {
+            <tr>
+                <td>@incident.Title</td>
+                <td>@incident.Description</td>
+                <td>@incident.Status.ToString()</td>
+                <td>@incident.DateReported.ToString("d")</td>
+            </tr>
+        }
+    </tbody>
+</table>

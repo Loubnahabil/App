@@ -1,0 +1,32 @@
+﻿@model IEnumerable<App.Models.EnvironmentalIncident>
+
+<h2>Incident Reports</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Date Reported</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var incident in Model)
+        {
+            <tr>
+                <td>@incident.Title</td>
+                <td>@incident.Description</td>
+                <td>@incident.Location</td>
+                <td>@incident.Status.ToString()</td>
+                <td>@incident.DateReported.ToString("d")</td>
+                <td>
+                    @Html.ActionLink("View", "ViewReport", new { id = incident.IncidentId }) |
+                    @Html.ActionLink("Edit", "EditReport", new { id = incident.IncidentId })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

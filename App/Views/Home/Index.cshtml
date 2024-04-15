@@ -1,0 +1,66 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Home Page";
+    var user = await UserManager.GetUserAsync(User);
+    var isAdmin = user != null && await UserManager.IsInRoleAsync(user, "Admin");
+}
+
+<div class="py-5 text-center">
+    <h1 class="display-4">@Html.Raw(isAdmin ? "Admin Dashboard" : "Welcome to EcoWatch")</h1>
+    <p class="lead">@Html.Raw(isAdmin ? "Manage all aspects of the environmental incident reports." : "Your dedicated partner in safeguarding the environment. Together, we can track, manage, and respond to environmental incidents swiftly and efficiently.")</p>
+    @if (isAdmin)
+    {
+        <a class="btn btn-primary" href="@Url.Action("ManageIncidents", "Admin")">Manage Reports</a>
+    }
+    else
+    {
+        <a class="btn btn-success" href="@Url.Action("Report", "Incidents")">Report an Incident</a>
+    }
+</div>
+
+<div class="row">
+    @if (!isAdmin)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">Reports Submitted</div>
+                <div class="card-body">
+                    <h3 class="card-title">1,234</h3>
+                    <p class="card-text">Incidents have been reported through our platform. Your reports make a difference!</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">Active Cases</div>
+                <div class="card-body">
+                    <h3 class="card-title">76</h3>
+                    <p class="card-text">Ongoing environmental cases are currently under investigation. Stay informed!</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header">Resolved This Month</div>
+                <div class="card-body">
+                    <h3 class="card-title">58</h3>
+                    <p class="card-text">Incidents have been resolved this month thanks to proactive community efforts.</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (!isAdmin)
+{
+    <div class="my-5">
+        <h2>How It Works</h2>
+        <p>Spot an environmental issue? Use EcoWatch to notify local authorities and community members. Track the progress of your reports and see the change you contribute to.</p>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/homepage-stats.js" asp-append-version="true"></script>
+}
