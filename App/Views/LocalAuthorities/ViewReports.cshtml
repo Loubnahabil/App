@@ -1,32 +1,43 @@
 ﻿@model IEnumerable<App.Models.EnvironmentalIncident>
 
-<h2>Incident Reports</h2>
+@{
+    ViewData["Title"] = "View Reports";
+}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Location</th>
-            <th>Status</th>
-            <th>Date Reported</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var incident in Model)
-        {
+<h2>Incident Reports for @ViewData["AuthorityType"]</h2>
+
+@if (!Model.Any())
+{
+    <p>No reports available.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@incident.Title</td>
-                <td>@incident.Description</td>
-                <td>@incident.Location</td>
-                <td>@incident.Status.ToString()</td>
-                <td>@incident.DateReported.ToString("d")</td>
-                <td>
-                    @Html.ActionLink("View", "ViewReport", new { id = incident.IncidentId }) |
-                    @Html.ActionLink("Edit", "EditReport", new { id = incident.IncidentId })
-                </td>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Date Reported</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var incident in Model)
+            {
+                <tr>
+                    <td>@incident.Title</td>
+                    <td>@incident.Description</td>
+                    <td>@incident.Location</td>
+                    <td>@incident.Status.ToString()</td>
+                    <td>@incident.DateReported.ToShortDateString()</td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditReport", "LocalAuthorities", new { id = incident.IncidentId }, new { @class = "link-class" }) <!-- Updated class -->
+                        @Html.ActionLink("Delete", "DeleteReport", "LocalAuthorities", new { id = incident.IncidentId }, new { @class = "link-class", onclick = "return confirm('Are you sure you want to delete this report?');" }) <!-- Updated class -->
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

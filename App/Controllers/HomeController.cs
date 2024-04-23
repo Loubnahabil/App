@@ -1,32 +1,42 @@
-﻿using App.Models;
+﻿using App.Data;
+using App.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Linq; // For LINQ queries
+using Microsoft.EntityFrameworkCore; // For Entity Framework functionality
+using System.Threading.Tasks; // For async method
 
-namespace App.Controllers
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly ILogger<HomeController> _logger;
+    private readonly ApplicationDbContext _context; // Assuming you have an ApplicationDbContext
+
+    public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
     {
-        private readonly ILogger<HomeController> _logger;
+        _logger = logger;
+        _context = context;
+    }
 
-        public HomeController(ILogger<HomeController> logger)
+    public async Task<IActionResult> Index()
+    {
+        var model = new StatisticsViewModel
         {
-            _logger = logger;
-        }
+            TotalIncidentsReported = await _context.EnvironmentalIncidents.CountAsync(),
+            IncidentsResolved = await _context.EnvironmentalIncidents.CountAsync(i => i.Status == IncidentStatus.Resolved),
+            ActiveIncidents = await _context.EnvironmentalIncidents.CountAsync(i => i.Status == IncidentStatus.UnderInvestigation)
+        };
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        return View(model);
+    }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+    public IActionResult Privacy()
+    {
+        return View();
+    }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

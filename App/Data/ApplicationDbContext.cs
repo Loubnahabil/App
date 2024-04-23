@@ -6,6 +6,9 @@ namespace App.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser> // Use your ApplicationUser class here
     {
+        public DbSet<LocalAuthorityIncidentType> LocalAuthorityIncidentTypes { get; set; }
+
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -17,6 +20,8 @@ namespace App.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<LocalAuthorityIncidentType>()
+           .HasKey(lat => new { lat.UserId, lat.IncidentTypeId });
 
             // If you have any custom model configuration, do it here.
             // For example, you might need to configure a compound key, set up relationships, or define indices.

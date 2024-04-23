@@ -1,48 +1,42 @@
 ﻿@model App.Models.EnvironmentalIncident
 
 @{
-    ViewData["Title"] = "Edit Incident";
+    ViewData["Title"] = "Edit Report";
 }
 
-<h1>Edit Incident</h1>
+<h2>Edit Report</h2>
 
-<form asp-action="EditIncident" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+
     <input type="hidden" asp-for="IncidentId" />
 
-    <div class="form-group mb-3">
+    <div class="form-group">
         <label asp-for="Title" class="control-label"></label>
         <input asp-for="Title" class="form-control" />
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
 
-    <div class="form-group mb-3">
+    <div class="form-group">
         <label asp-for="Description" class="control-label"></label>
         <textarea asp-for="Description" class="form-control"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
-    <div class="form-group mb-3">
+    <div class="form-group">
         <label asp-for="Location" class="control-label"></label>
         <input asp-for="Location" class="form-control" />
         <span asp-validation-for="Location" class="text-danger"></span>
     </div>
 
-    <div class="form-group mb-3">
-        <label asp-for="Type" class="control-label"></label>
-        <select asp-for="Type" class="form-control" asp-items="Html.GetEnumSelectList<App.Models.IncidentType>()"></select>
-        <span asp-validation-for="Type" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mb-3">
+    <div class="form-group">
         <label asp-for="Status" class="control-label"></label>
-        <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<App.Models.IncidentStatus>()"></select>
+        <select asp-for="Status" asp-items="Html.GetEnumSelectList<App.Models.IncidentStatus>()" class="form-control"></select>
         <span asp-validation-for="Status" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <input type="submit" value="Update" class="btn btn-success" />
-        <a asp-action="ManageIncidents" class="btn btn-secondary">Cancel</a>
+    <div class="form-group" style="margin-top: 20px;">
+        <button type="submit" class="btn btn-success">Save Changes</button>
     </div>
 </form>
 

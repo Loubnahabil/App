@@ -7,28 +7,32 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-8 offset-md-2">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3>Report an Environmental Incident</h3>
+            <div class="card bg-green">
+                <!-- Changed card background color to green -->
+                <div class="card-header bg-green text-white">
+                    <!-- Changed color to green -->
+                    <h3 style="color: black;">Report an Environmental Incident</h3> <!-- Changed text color to black -->
                 </div>
                 <div class="card-body">
                     @using (Html.BeginForm("Report", "Incidents", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                     {
                         @Html.AntiForgeryToken()
 
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-4">
+                            <!-- Increased margin-bottom for spacing -->
                             @Html.LabelFor(model => model.Title, new { @class = "control-label" })
                             @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
                         </div>
 
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-4">
+                            <!-- Consistent margin-bottom for all form groups -->
                             @Html.LabelFor(model => model.Location, new { @class = "control-label" })
                             @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
                         </div>
 
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-4">
                             @Html.LabelFor(model => model.Type, new { @class = "control-label" })
                             @Html.DropDownListFor(
                                      model => model.Type,
@@ -39,14 +43,26 @@
                             @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
                         </div>
 
-                        <div class="form-group mb-4">
+                        <div class="form-group mb-5">
+                            <!-- Added more space above the button -->
                             @Html.LabelFor(model => model.Description, new { @class = "control-label" })
-                            @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", rows = 4 } })
+                            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = 6 }) <!-- Adjusted rows to 6 for a larger text area -->
                             @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                         </div>
 
-                        <div class="form-group">
-                            <input type="submit" value="Submit" class="btn btn-primary btn-block" />
+                        <div class="form-group pt-2 pb-4" style="margin-top: -10px;">
+                            <!-- Adjusted margin-top to move the button up -->
+                            <div class="row">
+                                <div class="col">
+                                    <input type="submit" value="Submit" class="btn btn-success btn-block" style="height: 50px; font-size: 1.2em;" /> <!-- Changed button color to green -->
+                                </div>
+                                <div class="col">
+                                    <!-- Empty div for pushing cancel button to the right -->
+                                </div>
+                                <div class="col-auto">
+                                    <a href="javascript:history.back()" class="btn btn-danger" style="height: 50px; font-size: 1.2em;">Cancel</a>
+                                </div>
+                            </div>
                         </div>
                     }
                 </div>
@@ -54,4 +70,3 @@
         </div>
     </div>
 </div>
-

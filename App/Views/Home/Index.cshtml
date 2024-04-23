@@ -4,30 +4,48 @@
 @{
     ViewData["Title"] = "Home Page";
     var user = await UserManager.GetUserAsync(User);
-    var isAdmin = user != null && await UserManager.IsInRoleAsync(user, "Admin");
+    var roles = user != null ? await UserManager.GetRolesAsync(user) : new List<string>();
+    var isAdmin = roles.Contains("Admin");
+    var isLocalAuthority = roles.Contains("LocalAuthority");
+    var authorityType = ViewData["AuthorityType"] as string;
 }
 
-<div class="py-5 text-center">
-    <h1 class="display-4">@Html.Raw(isAdmin ? "Admin Dashboard" : "Welcome to EcoWatch")</h1>
-    <p class="lead">@Html.Raw(isAdmin ? "Manage all aspects of the environmental incident reports." : "Your dedicated partner in safeguarding the environment. Together, we can track, manage, and respond to environmental incidents swiftly and efficiently.")</p>
-    @if (isAdmin)
-    {
-        <a class="btn btn-primary" href="@Url.Action("ManageIncidents", "Admin")">Manage Reports</a>
-    }
-    else
-    {
-        <a class="btn btn-success" href="@Url.Action("Report", "Incidents")">Report an Incident</a>
-    }
-</div>
+@if (isAdmin)
+{
+    <div class="text-center">
+        <h1 class="display-4">Admin Dashboard</h1>
+        <p class="lead">Manage all aspects of the environmental incident reports.</p>
+        <a class="btn btn-primary btn-lg" href="@Url.Action("ManageIncidents", "Admin")" role="button">Manage Reports</a>
+    </div>
+}
+else if (isLocalAuthority)
+{
+    <div class="text-center">
+        <h1 class="display-4">Hello @authorityType Authorities</h1>
+        <p class="lead">Here you can manage and review incident reports specific to your field.</p>
+        <a class="btn btn-info btn-lg" href="@Url.Action("ViewReports", "LocalAuthorities")" role="button">Manage Reports</a>
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4">Welcome to EcoWatch</h1>
+        <p class="lead">Your dedicated partner in safeguarding the environment. Together, we can track, manage, and respond to environmental incidents swiftly and efficiently.</p>
+        @if (user != null)
+        {
+            <a class="btn btn-success btn-lg my-3" href="@Url.Action("Report", "Incidents")" role="button">Report an Incident</a>
+        }
+    </div>
+}
 
-<div class="row">
-    @if (!isAdmin)
-    {
+@if (!isAdmin && !isLocalAuthority)
+{
+    <div class="row">
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
                 <div class="card-header">Reports Submitted</div>
                 <div class="card-body">
-                    <h3 class="card-title">1,234</h3>
+                    <h3 class="card-title">@Model.TotalIncidentsReported</h3>
                     <p class="card-text">Incidents have been reported through our platform. Your reports make a difference!</p>
                 </div>
             </div>
@@ -36,7 +54,7 @@
             <div class="card mb-4 shadow-sm">
                 <div class="card-header">Active Cases</div>
                 <div class="card-body">
-                    <h3 class="card-title">76</h3>
+                    <h3 class="card-title">@Model.ActiveIncidents</h3>
                     <p class="card-text">Ongoing environmental cases are currently under investigation. Stay informed!</p>
                 </div>
             </div>
@@ -45,16 +63,13 @@
             <div class="card mb-4 shadow-sm">
                 <div class="card-header">Resolved This Month</div>
                 <div class="card-body">
-                    <h3 class="card-title">58</h3>
+                    <h3 class="card-title">@Model.IncidentsResolved</h3>
                     <p class="card-text">Incidents have been resolved this month thanks to proactive community efforts.</p>
                 </div>
             </div>
         </div>
-    }
-</div>
+    </div>
 
-@if (!isAdmin)
-{
     <div class="my-5">
         <h2>How It Works</h2>
         <p>Spot an environmental issue? Use EcoWatch to notify local authorities and community members. Track the progress of your reports and see the change you contribute to.</p>
